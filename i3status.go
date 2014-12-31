@@ -26,8 +26,8 @@ const defaultInterface = "wlp2s0"
 type item struct {
 	Name     string `json:"name"`
 	FullText string `json:"full_text"`
-	MinWidth string `json:"min_width"`
-	Align    string `json:"align"`
+	MinWidth string `json:"min_width,omitempty"`
+	Align    string `json:"align,omitempty"`
 }
 
 // Wrap the real i3status by consuming its output, modifying it, and then printing to stdout
@@ -36,9 +36,9 @@ func i3status() {
 	if len(os.Args) > 1 {
 		iface = os.Args[1]
 	}
-	client, err := rpc.DialHTTP("unix", sockFile)
+	client, err := rpc.Dial("unix", sockFile)
 	if err != nil {
-		log.Fatalf("dialing:", err)
+		log.Fatalf("dialing: %v", err)
 	}
 	s := bufio.NewScanner(os.Stdin)
 	// ignore version line and subsequent line

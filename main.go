@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"log"
 	"net"
-	"net/http"
 	"net/rpc"
 	"os"
 	"path/filepath"
@@ -117,7 +116,7 @@ func runClient() {
 		os.Exit(1)
 	}
 	method := args[0]
-	client, err := rpc.DialHTTP("unix", sockFile)
+	client, err := rpc.Dial("unix", sockFile)
 	if err != nil {
 		log.Fatalf("dialing:", err)
 	}
@@ -208,13 +207,12 @@ func (ss StatsMap) TxRate(iface string, Bps *Rate) error {
 
 func serve(ss StatsMap) {
 	rpc.Register(ss)
-	rpc.HandleHTTP()
 	os.Remove(sockFile)
 	l, err := net.Listen("unix", sockFile)
 	if err != nil {
 		panic(err)
 	}
-	http.Serve(l, nil)
+	rpc.Accept(l)
 }
 
 func dumpStats(ss map[string]stats) {
