@@ -95,17 +95,22 @@ func lock(dir string) bool {
 }
 
 func main() {
-	if filepath.Base(os.Args[0]) == "i3status-dumbw" {
+	switch {
+	case filepath.Base(os.Args[0]) == "i3status-dumbw":
 		i3status()
 		return
-	}
-	if lock(runDir) {
+	case lock(runDir):
 		fmt.Printf("no lock found - daemonising\n")
 		// TODO(jonboulle): actually daemonise?
 		runDaemon()
 		return
+	default:
+		fmt.Printf("found existing dumbw - running as client\n")
+		runClient()
 	}
-	fmt.Printf("found existing dumbw - running as client\n")
+}
+
+func runClient() {
 	var flagIface string
 	flag.StringVar(&flagIface, "iface", "wlp2s0", "interface for statz")
 	flag.Parse()
@@ -143,7 +148,6 @@ func main() {
 	}
 }
 
-// never returns
 func runDaemon() {
 	ss := StatsMap{}
 	go serve(ss)
