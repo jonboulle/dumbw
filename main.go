@@ -58,7 +58,7 @@ func (r Rate) String() string {
 		f = f / 1024.0
 		suffix = "GB/s"
 	}
-	return fmt.Sprintf("%f%s", f, suffix)
+	return fmt.Sprintf("%2.2f%s", f, suffix)
 }
 
 type StatsMap map[string]stats
@@ -95,12 +95,17 @@ func lock(dir string) bool {
 }
 
 func main() {
+	if filepath.Base(os.Args[0]) == "i3status-dumbw" {
+		i3status()
+		return
+	}
 	if lock(runDir) {
 		fmt.Printf("no lock found - daemonising\n")
 		// TODO(jonboulle): actually daemonise?
 		runDaemon()
+		return
 	}
-	fmt.Printf("found dumbw daemon - running as client\n")
+	fmt.Printf("found existing dumbw - running as client\n")
 	var flagIface string
 	flag.StringVar(&flagIface, "iface", "wlp2s0", "interface for statz")
 	flag.Parse()
