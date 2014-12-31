@@ -45,11 +45,8 @@ type Rate float64
 
 func (r Rate) String() string {
 	f := float64(r)
-	suffix := "B/s"
-	if f > 1024.0 {
-		f = f / 1024.0
-		suffix = "KB/s"
-	}
+	f = f / 1024.0
+	suffix := "KB/s"
 	if f > 1024.0 {
 		f = f / 1024.0
 		suffix = "MB/s"
@@ -58,7 +55,7 @@ func (r Rate) String() string {
 		f = f / 1024.0
 		suffix = "GB/s"
 	}
-	return fmt.Sprintf("%2.2f%s", f, suffix)
+	return fmt.Sprintf("%6.2f%s", f, suffix)
 }
 
 type StatsMap map[string]stats

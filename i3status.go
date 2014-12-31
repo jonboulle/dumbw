@@ -26,6 +26,8 @@ const defaultInterface = "wlp2s0"
 type item struct {
 	Name     string `json:"name"`
 	FullText string `json:"full_text"`
+	MinWidth string `json:"min_width"`
+	Align    string `json:"align"`
 }
 
 // Wrap the real i3status by consuming its output, modifying it, and then printing to stdout
