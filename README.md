@@ -21,3 +21,4 @@ bar {
 
 TODO:
  - make i3status wrapper more robust in the case of client failure
+ - either move to a dbus API, or just run dumbw directly instead of wrapping it; probably just overcomplicated to have a separate daemon
